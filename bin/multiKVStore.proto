@@ -1,0 +1,35 @@
+syntax = "proto3";
+package io.cybermiles.cosmos.sdk.store.multiKVStoreBuilder;
+
+message CacheMultiStoreBuf {
+	CacheKVStore db = 1;
+	int64 nextVersion = 2;
+	CommitID lastCommitID = 3;
+	map<string,CacheKVStore> substores = 4;
+
+	message CommitID {
+		int64 version = 1;
+		bytes hash = 2;
+	} 
+}
+
+message CacheKVStore {
+	//Mutex mtx = 1;
+	map<string, CValue> cache = 2;
+	KVStore parent = 3;
+}
+
+message CValue {
+	bytes value = 1;
+	bool deleted = 2;
+	bool dirty = 3;
+}
+
+message KVStore {
+	repeated Model store = 1;
+
+	message Model {
+		bytes key = 1;
+		bytes value = 2;
+	}
+}
